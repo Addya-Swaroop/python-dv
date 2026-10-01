@@ -1,32 +1,52 @@
-#include <stdio.h>
-int main()
-{
-    int n, i;
-    float avgWT = 0, avgTAT = 0;
-    printf("Enter number of processes: ");
-    scanf("%d", &n);
-    int AT[n], BT[n], FT[n], TAT[n], WT[n];
-    for (i = 0; i < n; i++)
-    {
-        printf("AT & BT of P%d: ", i + 1);
-        scanf("%d %d", &AT[i], &BT[i]);
-    }
- FT[0] = AT[0] + BT[0];
-    for (i = 1; i < n; i++)
-        FT[i] = FT[i - 1] + BT[i];
-    for (i = 0; i < n; i++)
-    {
-        TAT[i] = FT[i] - AT[i];
-        WT[i] = TAT[i] - BT[i];
-        avgWT += WT[i];
-        avgTAT += TAT[i];	
-    }
+#include <iostream>
+using namespace std;
 
-    printf("\nP\tAT\tBT\tFT\tTAT\tWT\n");
-    for (i = 0; i < n; i++)
-        printf("P%d\t%d\t%d\t%d\t%d\t%d\n",
-               i + 1, AT[i], BT[i], FT[i], TAT[i], WT[i]);
-    printf("\nAvg WT = %.2f", avgWT / n);
-    printf("\nAvg TAT = %.2f", avgTAT / n);
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int value) {
+        data = value;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+Node* insert(Node* root, int value) {
+    if (root == NULL)
+        return new Node(value);
+
+    if (value < root->data)
+        root->left = insert(root->left, value);
+    else
+        root->right = insert(root->right, value);
+
+    return root;
+}
+
+void inorder(Node* root) {
+    if (root != NULL) {
+        inorder(root->left);
+        cout << root->data << " ";
+        inorder(root->right);
+    }
+}
+
+int main() {
+    Node* root = NULL;
+
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 70);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 60);
+    insert(root, 80);
+
+    cout << "Inorder traversal: ";
+    inorder(root);
+
     return 0;
 }
